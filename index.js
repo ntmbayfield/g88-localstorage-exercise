@@ -12,13 +12,22 @@
     }
   };
 
-  const $xhr = $.ajax({
-    method: 'get',
-    url: 'https://api.myjson.com/bins/4703f',
-    dataType: 'json'
-  });
+  const data = JSON.parse(localStorage.getItem('cars'));
 
-  $xhr.done((data) => {
+  if (data) {
     renderCars(data);
-  });
+  }
+  else {
+    const $xhr = $.ajax({
+      method: 'get',
+      url: 'https://api.myjson.com/bins/4703f',
+      dataType: 'json'
+    });
+
+    $xhr.done((data) => {
+      localStorage.setItem('cars', JSON.stringify(data));
+
+      renderCars(data);
+    });
+  }
 })();
