@@ -1,33 +1,55 @@
 (function() {
   'use strict';
 
+  const favorites = JSON.parse(localStorage.getItem('favorites')) || {};
+
   const renderCars = function(cars) {
-    const $ul = $('ul');
+    const $tbody = $('tbody');
+
+    $tbody.html('');
 
     for (const car of cars) {
-      const content = `${car.make} ${car.model} ${car.color} ${car.price}`;
-      const $li = $('<li>').text(content);
+      const $tdMake = $('<td>').text(car.make);
+      const $tdModel = $('<td>').text(car.model);
+      const $tdColor = $('<td>').text(car.color);
+      const $tdPrice = $('<td>').text(car.price);
 
-      $ul.append($li);
+      const $tdFav = $('<td>').css('cursor', 'pointer');
+
+      if (favorites[car.id]) {
+        $tdFav.text('❤️');
+      }
+      else {
+        $tdFav.text('💔');
+      }
+
+      $tdFav.click(() => {
+        favorites[car.id] = !favorites[car.id];
+
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+
+        renderCars(cars);
+      });
+
+      const $tr = $('<tr>');
+
+      $tr.append($tdMake);
+      $tr.append($tdModel);
+      $tr.append($tdColor);
+      $tr.append($tdPrice);
+      $tr.append($tdFav);
+
+      $tbody.append($tr);
     }
   };
 
-  const data = JSON.parse(localStorage.getItem('cars'));
+  const $xhr = $.ajax({
+    method: 'get',
+    url: 'https://api.myjson.com/bins/4sydf',
+    dataType: 'json'
+  });
 
-  if (data) {
+  $xhr.done((data) => {
     renderCars(data);
-  }
-  else {
-    const $xhr = $.ajax({
-      method: 'get',
-      url: 'https://api.myjson.com/bins/4703f',
-      dataType: 'json'
-    });
-
-    $xhr.done((data) => {
-      localStorage.setItem('cars', JSON.stringify(data));
-
-      renderCars(data);
-    });
-  }
+  });
 })();
