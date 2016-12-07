@@ -23,7 +23,7 @@
         $tdFav.text('💔');
       }
 
-      $tdFav.click(() => {
+      $tdFav.on('click', () => {
         favorites[car.id] = !favorites[car.id];
 
         localStorage.setItem('favorites', JSON.stringify(favorites));
