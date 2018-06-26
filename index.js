@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  const favorites = JSON.parse(localStorage.getItem('favoriteCars')) || {};
+  const favorites = JSON.parse(localStorage.getItem('favorites')) || {};
 
   const renderCars = function(cars) {
     const $tbody = $('tbody');
@@ -23,9 +23,9 @@
         $tdFav.text('💔');
       }
 
-      $tdFav.on('click', () => {
+      $tdFav.click(() => {
         favorites[car.id] = !favorites[car.id];
-        localStorage.setItem('favoriteCars', JSON.stringify(favoriteCars))
+        localStorage.setItem('favorites', JSON.stringify(favorites))
 
 
         renderCars(cars);
